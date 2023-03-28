@@ -61,9 +61,9 @@ extension PDFViewViewModel: URLSessionDownloadDelegate {
     }
 
     // ダウンロードが失敗した時に呼ばれる
-       func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-           if let error = error {
-               print("🍻\(#function): Fail to download PDF \(error)")
-           }
-       }
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if let error = error {
+            print("🍻\(#function): Fail to download PDF \(error)")
+        }
+    }
 }

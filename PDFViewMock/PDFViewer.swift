@@ -16,7 +16,6 @@ final class PDFViewer: UIView {
     private var pdfDocument: PDFDocument?
     private let tapGestureRecognizer = UITapGestureRecognizer()
     private let pdfViewGestureRecognizer = PDFViewGestureRecognizer()
-    weak var delegate: PDFViewerDelegate?
 
     private(set) lazy var pdfView: PDFView = {
         let pdfView = PDFView(frame: frame)
@@ -51,19 +50,18 @@ final class PDFViewer: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        pdfView.delegate = self
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setPDFwithDownloadURL(url: URL, direction: PDFReaderViewModel.Direction) {
+    func setPDFwithDownloadURL(url: URL) {
         if let document = PDFDocument(url: url) {
             self.pdfDocument = document
             Task { @MainActor in
                 self.pdfView.document = document
-                self.pdfView.displayDirection = direction == .vertical ? .vertical: .horizontal
+                self.pdfView.displayDirection = .vertical
                 self.pdfThumbnailView.isHidden = false
                 self.pageLabel.isHidden = false
                 self.pageLabel.textColor = .white
@@ -147,11 +145,5 @@ class PDFViewGestureRecognizer: UIGestureRecognizer {
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
         isTracking = false
-    }
-}
-
-extension PDFViewer: PDFViewDelegate {
-    func pdfViewWillClick(onLink sender: PDFView, with url: URL) {
-        delegate?.clickPDFLink(url: url)
     }
 }
